@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- CSS -->
+    <!-- load bootstrap (bootswatch version) -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- JS -->
+    <!-- load angular, ngRoute, ngAnimate -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-route.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.js"></script>
+    <script src="app.js"></script>
+    <style>
+        .bg{
+            background-color: lightsteelblue;
+        }
+    </style>
+</head>
+
+<body ng-app ng-controller="LoginController" class="bg">
+    <h2>Hello {{user.name}}</h2>
+    <div>
+        Username: <input type="text" ng-model="user.name">
+    </div>
+    <br/>
+    <div>
+        Password: <input tupe="text" ng-model="user.password">
+    </div>
+    <br/>
+    <div>
+        <a href="home.html" class="btn btn-primary">Login</a>
+        <a href="register.html" class="btn btn-primary">Register</a>
+    </div>
+    <br/>
+    <div ng-repeat="login in logins">{{login}}</div>
+</body>
+
+<script>
+    function LoginController($scope) {
+
+        $scope.logins = [];
+        $scope.login = function (user, pwd) {
+            localStorage.setItem("name" , user);
+            $scope.logins.push( localStorage.getItem("name") + " was logged in.");
+        };
+    }
+</script>
+</html>

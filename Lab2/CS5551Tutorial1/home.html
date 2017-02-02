@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" id="home" ng-app="GoogleDirection">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWhSE1HAi753_M8rcFTfcbBXUQInf8y6c&v=3.exp&sensor=true"></script>    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        #map-canvas {
+            width: 550px;
+            height: 450px;
+        }
+        .weatherModule{
+            background: #f2f2f2;
+            height: 150px;
+            width: 250px;
+            border: 1px;
+            padding: 1em;
+        }
+        .bg{
+            background-color: lightsteelblue
+        }
+    </style>
+</head>
+<body class="bg">
+<div class="wrapp" ng-controller="googlemapoutput">
+    <div class="row">
+        From: <input type="text" id="Autocomplete" class="form-control"  ng-model="startlocation"/>
+          To: <input type="text"  ng-model="endlocation" id="endlocation" />
+
+        <button id="btn" ng-click="calcRoute()">
+            Navigate
+        </button>
+        <a href="index.html" class="btn btn-primary">Sign Out</a>
+        <br/></br>
+    </div>
+    <div id="map-canvas" style="height: 400px;"></div>
+    <br/>
+    <br/><br/>
+    <div ng-app="weather" ng-controller="weatherctrl">
+        Weather in: {{startlocation}}
+    </div>
+
+    <br/>
+    <div class="weatherModule">
+        <p class="currentConditions" ng-bind-html-unsafe="currentweather.html"></p>
+        <div class="currentIcon" ng-bind-html-unsafe="currentIcon.html"></div>
+    </div>
+    <div>
+        Weather in: {{endlocation}}
+        <br/>
+</div>
+    <div class="weatherModule">
+        <p class="currentConditions" ng-bind-html-unsafe="currentweather.html"></p>
+        <div class="currentIcon" ng-bind-html-unsafe="currentIcon.html"></div>
+    </div>
+    </div>
+</div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    angular.module('GoogleDirection', [])
+        .controller('googlemapoutput', function ($scope) {
+
+            var map;
+            var mapOptions;
+            var directionsDisplay = new google.maps.DirectionsRenderer({
+                draggable: true
+            });
+            var directionsService = new google.maps.DirectionsService();
+
+            $scope.initialize = function () {
+                var pos = new google.maps.LatLng(34, -94);
+                var mapOptions = {
+                    zoom: 3,
+                    center: pos
+                };
+
+                map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+            };
+            $scope.calcRoute = function () {
+                var end = document.getElementById('endlocation').value;
+                var start = document.getElementById('startlocation').value;
+
+                var request = {
+                    origin: start,
+                    destination: end,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setMap(map);
+                        directionsDisplay.setDirections(response);
+                        console.log(status);
+                    }
+
+                });
+            };
+
+            google.maps.event.addDomListener(window, 'load', $scope.initialize);
+
+        });
+
+
+
+</script>
