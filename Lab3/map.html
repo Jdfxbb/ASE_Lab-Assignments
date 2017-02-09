@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="directionsPage">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Directions</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--angularjs-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+
+    <style>
+        #map{
+            height: 500px;
+            width: 50%;
+        }
+        .weatherModule {
+            background: #f2f2f2;
+            height: 150px;
+            width: 250px;
+            border: 1px;
+            padding: 1em;
+        }
+        .left{
+            float: left;
+            text-align: right;
+            margin: 2px 10px;
+            display: inline;
+        }
+        .right{
+            float: left;
+            text-align: left;
+            margin: 2px 10px;
+            display: inline;
+        }
+
+    </style>
+</head>
+<body id="ctrl" ng-controller="directionsController">
+<h1 class="container">Find your way</h1> <!--Page heading-->
+<div class="container"> <!--outer container for page-->
+    <input id="originInput" type="text" placeholder="Origin"> <!--origin search box-->
+
+    <input id="destinationInput" type="text" placeholder="Destination"> <!--destination search box-->
+
+    <div id="map" class = "left"></div> <!--map object-->
+
+    <!--call to google places api-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBairt1Z-mmE-7ywYdt17wfRhFSiM2DcZc&libraries=places&callback=initMap"
+            async></script>
+
+    <div>
+        <div class="weatherModule left">
+            <p>Origin</p>
+            <p class="currentConditions" ng-bind-html="renderHtml(origWeather)" id="origWeather"></p>
+            <div class="currentIcon" ng-bind-html="renderHtml(origIcon)" id="origIcon"></div>
+        </div>
+        <div class="weatherModule right">
+            <p>Destination</p>
+            <p class="currentConditions" ng-bind-html="renderHtml(destWeather)" id="destWeather"></p>
+            <div class="currentIcon" ng-bind-html="renderHtml(destIcon)" id="destIcon"></div>
+        </div>
+        <div>
+            <a class="btn btn-primary" ng-click="viewDestination()" ng-disabled="isDisabled">Check out this destination</a>
+        </div>
+    </div>
+    <br/>
+
+</div>
+<div> <!--navigation buttons-->
+    <a class="btn" ng-click="returnHome()">Return Home</a>
+    <a class="btn" ng-click="signOut()">Sign Out</a>
+</div>
+
+</body>
+</html>
+<script>
+    function initMap() { // creates map centered over Kansas City
+        var map = new google.maps.Map(document.getElementById('map'), {
+            mapTypeControl: false,
+            center: {lat: 39, lng: -94},
+            zoom: 7,
+            mapTypeId: "hybrid"
+        });
+
+        new AutocompleteDirectionsHandler(map);
+    }
+
+    function AutocompleteDirectionsHandler(map) { // constructor for autocomplete handler object
+        this.map = map;
+        this.originPlaceId = null;
+        this.destinationPlaceId = null;
+        this.travelMode = 'DRIVING';
+        var originInput = document.getElementById('originInput');
+        var destinationInput = document.getElementById('destinationInput');
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay.setMap(map);
+
+        var originAutocomplete = new google.maps.places.Autocomplete(
+            originInput, {placeIdOnly: true});
+        var destinationAutocomplete = new google.maps.places.Autocomplete(
+            destinationInput, {placeIdOnly: true});
+
+        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+    }
+
+    AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) { // listener for search boxes
+        var me = this;
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.place_id) {
+                window.alert("Please select an option from the dropdown list.");
+                return;
+            }
+            if (mode === 'ORIG') {
+                me.originPlaceId = place.place_id;
+                angular.element(document.getElementById('ctrl')).scope().getWeather(place.name, mode);
+
+            } else {
+                me.destinationPlaceId = place.place_id;
+                angular.element(document.getElementById('ctrl')).scope().getWeather(place.name, mode);
+            }
+            me.route();
+        })
+
+
+    };
+
+    AutocompleteDirectionsHandler.prototype.route = function() { // calcRoute function
+        if (!this.originPlaceId || !this.destinationPlaceId) {
+            return;
+        }
+        var me = this;
+
+        this.directionsService.route({
+            origin: {'placeId': this.originPlaceId},
+            destination: {'placeId': this.destinationPlaceId},
+            travelMode: this.travelMode
+        }, function(response, status) {
+            if (status === 'OK') {
+                me.directionsDisplay.setDirections(response);
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    };
+
+    var app = angular.module('directionsPage', []);
+    app.controller('directionsController', ['$scope', '$http', '$window','$sce', function($scope,$http,$window,$sce){
+        $scope.isDisabled = true;
+        $scope.signOut = function(){ // logs user out and returns to landing page
+            document.location.href = "index.html";
+        };
+        $scope.returnHome = function(){ // returns to home page
+            document.location.href = "home.html";
+        };
+        $scope.getWeather = function(name, mode) {
+            var splitter = name.split(',');
+            console.log(splitter[1].length);
+            var url = 'http://api.wunderground.com/api/36b799dc821d5836/conditions/q/' + splitter[1] + '/' + splitter[0] + '.json';
+            url = url.replace(/\s/g, '%20');
+            url = url.replace(/,/g, "%20");
+            console.log(url);
+            if (mode === "ORIG") {
+                if (splitter[1].length == 3) {
+                    $http.get(url).success(function (data) {
+                        temp = data.current_observation.temp_f;
+                        icon = data.current_observation.icon_url;
+                        weather = data.current_observation.weather;
+                        $scope.origWeather = "Currently " + temp + " &deg; F and " + weather + "";
+                        $scope.origIcon = "<img src=\"" + icon + "\"/>";
+                    })
+                }
+            }
+            else {
+                localStorage.setItem("destination", name);
+                $scope.isDisabled  = false;
+                if (splitter[1].length == 3) {
+                    $http.get(url).success(function (data) {
+                        console.log(data);
+                        temp = data.current_observation.temp_f;
+                        icon = data.current_observation.icon_url;
+                        weather = data.current_observation.weather;
+                        $scope.destWeather = "Currently " + temp + " &deg; F and " + weather + "";
+                        $scope.destIcon = "<img src=\"" + icon + "\"/>";
+                    })
+                }
+            }
+        };
+        $scope.renderHtml = function(html){
+            return $sce.trustAsHtml(html);
+        };
+        $scope.viewDestination = function(){
+            document.location.href="mashup.html";
+        };
+    }])
+</script>

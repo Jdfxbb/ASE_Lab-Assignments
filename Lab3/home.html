@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="homePage">
+<head>
+    <meta charset="UTF-8">
+    <title>Traveller Home</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--angularjs-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body ng-controller="homeController">
+<h1>{{name}}'s Home</h1>
+<div>
+    <h3>Plan Your Next Excursion Here</h3>
+    <div>
+        <a class="btn" ng-click="map()">Plot a route</a>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    var app = angular.module('homePage', []);
+    app.controller('homeController', function($scope){
+        $scope.name = localStorage.getItem('username');
+        $scope.map = function(){
+            document.location.href = "map.html";
+        }
+        $scope.mashup = function(){
+            document.location.href = "mashup.html";
+        };
+
+    })
+</script>

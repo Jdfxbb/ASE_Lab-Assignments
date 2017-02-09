@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="landingPage">
+<head>
+    <meta charset="UTF-8">
+    <title>CS5551 Demo</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--angularjs-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+
+    <style>
+        body{
+            background-color:white;
+        }
+        a{
+            background-color: rebeccapurple;
+            color: white;
+        }
+        a:hover{
+            background-color:lightsteelblue;
+        }
+        input{
+            background-color:white;
+        }
+        .myButton{
+
+            margin: 16px;
+        }
+        .center{
+            text-align:center;
+            color: rebeccapurple;
+        }
+        .div1{
+            height: 120px;
+            border-radius: 5px;
+            background-color: lightsteelblue;
+            align-self: center;
+        }
+        .div2{
+            border-radius: 5px;
+            background-color: lightgray;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body ng-controller="loginController" class="container">
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function(){
+        FB.init({
+            appId: '1234548973292713',
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            console.log(response.status);
+            if(response.status == 'connected'){
+                document.location.href = "home.html";
+            }
+
+
+        })
+    }
+</script>
+<div class="div1">
+<h1 class="center">CS5551 Demo</h1>
+    <h4 class="center">Welcome {{username}}</h4>
+</div>
+<div class="div2">
+<form name="loginForm">
+<p>Username: <input type="text" name="username" ng-model="username" required></p>
+<p>Password: <input type="password" name="password" ng-model="password" required></p>
+</form>
+</div>
+<div class="div1">
+    <a class="btn myButton" ng-disabled="loginForm.$invalid" ng-click="validate(username,password)">Login</a>
+    <a class="btn myButton" ng-click="register()">Register</a>
+
+</div>
+<div class="div2">
+    <h4>-OR-</h4>
+</div>
+<div class="div1">
+    <fb:login-button login-button scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="true" class="btn myButton"/>
+</div>
+</body>
+</html>
+
+<script>
+    var app = angular.module('landingPage', []);
+    app.controller('loginController', ['$scope', function($scope){
+        $scope.clicked = function(){
+            $scope.message = "clicked";
+
+        };
+        $scope.validate = function(user, pass) {
+            if (localStorage.getItem('username') == user && localStorage.getItem('password') == pass) {
+                document.location.href = "home.html";
+            }
+            else {
+                $scope.message = "Invalid Login";
+            }
+        };
+        $scope.register = function(){
+            document.location.href="register.html";
+        };
+        $scope.login = function(){
+            document.location.href = "home.html";
+        };
+    }])
+</script>
