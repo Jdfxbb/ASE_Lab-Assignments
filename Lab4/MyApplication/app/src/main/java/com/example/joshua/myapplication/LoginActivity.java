@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.widget.Button;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,6 +21,33 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Button signInBtn = (Button) findViewById(R.id.signInBtn);
+        signInBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                EditText usernameControl = (EditText) findViewById(R.id.usernameBox);
+                EditText passwordControl = (EditText) findViewById(R.id.usernameBox);
+                TextView errorText = (TextView) findViewById(R.id.InvalidTextView);
+                String userName = usernameControl.getText().toString();
+                String password = passwordControl.getText().toString();
+
+                boolean isValid = false;
+
+                if(!userName.isEmpty() && !password.isEmpty()){
+                    if(userName == "Admin" && password == "Admin"){
+                        isValid = true;
+                    }
+                }
+                if(!isValid){
+                    errorText.setVisibility(View.VISIBLE);
+                }
+                else{
+                    Intent redirect = new Intent(LoginActivity.this, APIActivity.class);
+                    startActivity(redirect);
+                }
+            }
+        });
     }
 
     @Override
@@ -45,26 +73,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void validate(View view){
-        EditText usernameControl = (EditText) findViewById(R.id.usernameBox);
-        EditText passwordControl = (EditText) findViewById(R.id.usernameBox);
-        TextView errorText = (TextView)findViewById(R.id.InvalidTextView) ;
-        String userName = usernameControl.getText().toString();
-        String password = passwordControl.getText().toString();
 
-        boolean isValid = false;
 
-        if(!userName.isEmpty() && !password.isEmpty()){
-            if(userName == "Admin" && password == "Admin"){
-                isValid = true;
-            }
-        }
-        if(!isValid){
-            errorText.setVisibility(View.VISIBLE);
-        }
-        else{
-            Intent redirect = new Intent(LoginActivity.this, APIActivity.class);
-            startActivity(redirect);
-        }
 
 
     }
