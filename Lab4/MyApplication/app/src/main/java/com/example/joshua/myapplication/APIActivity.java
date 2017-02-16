@@ -29,20 +29,22 @@ import okhttp3.Response;
 //yandex api trnsl.1.1.20170215T201824Z.0a3a0b4b920cfc41.63bb3008e7031c54c5b19eff0fec413341527288
 
 public class APIActivity extends AppCompatActivity {
-    final String apiKey = "trnsl.1.1.20170215T201824Z.0a3a0b4b920cfc41.63bb3008e7031c54c5b19eff0fec413341527288";
+    EditText toTranslateView;
     String toTranslate;
-    TextView translated = (TextView) findViewById(R.id.results);
-    EditText toTranslateView = (EditText) findViewById(R.id.results);
-    Button translate = (Button) findViewById(R.id.translateBtn);
-
+    TextView translated;
+    Button translateBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("here", "here");
+        final String apiKey = "trnsl.1.1.20170215T201824Z.0a3a0b4b920cfc41.63bb3008e7031c54c5b19eff0fec413341527288";
+        translated = (TextView) findViewById(R.id.results);
+        Button translateBtn = (Button) findViewById(R.id.translateBtn);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        translate.setOnClickListener(new View.OnClickListener(){
+        translateBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 toTranslateView = (EditText) findViewById(R.id.results);
@@ -59,7 +61,7 @@ public class APIActivity extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback(){
                         @Override
                         public void onFailure(Call call, IOException e){
-                            System.out.println(e.getMessage());
+                            Log.d("failure", e.getMessage());
                         }
                         @Override
                         public void onResponse(Call call, Response response) throws IOException{

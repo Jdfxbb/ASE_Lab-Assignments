@@ -12,22 +12,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Login", "Login");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Button signInBtn;
 
-        Button signInBtn = (Button) findViewById(R.id.signInBtn);
+
+        signInBtn = (Button)findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 EditText usernameControl = (EditText) findViewById(R.id.usernameBox);
-                EditText passwordControl = (EditText) findViewById(R.id.usernameBox);
+                EditText passwordControl = (EditText) findViewById(R.id.passwordBox);
                 TextView errorText = (TextView) findViewById(R.id.InvalidTextView);
                 String userName = usernameControl.getText().toString();
                 String password = passwordControl.getText().toString();
@@ -35,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 boolean isValid = false;
 
                 if(!userName.isEmpty() && !password.isEmpty()){
-                    if(userName == "Admin" && password == "Admin"){
+                    if(userName.equals("Admin") && password.equals("Admin")){
                         isValid = true;
                     }
                 }
@@ -43,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
                     errorText.setVisibility(View.VISIBLE);
                 }
                 else{
-                    Intent redirect = new Intent(LoginActivity.this, APIActivity.class);
-                    startActivity(redirect);
+                    Intent signIn = new Intent(LoginActivity.this, APIActivity.class);
+                    startActivity(signIn);
                 }
             }
         });

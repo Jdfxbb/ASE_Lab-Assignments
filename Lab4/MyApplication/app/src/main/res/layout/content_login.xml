@@ -50,19 +50,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
-    <Button
-        android:text="Sign In"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signInBtn"
-        android:layout_marginTop="17dp"
-        android:layout_below="@+id/passwordBox"
-        android:onClick="validate (LoginActivity)"
-        android:background="@android:color/holo_purple"
-        android:textColor="@android:color/white"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:text="Invalid Username and Password"
         android:layout_width="wrap_content"
@@ -74,5 +61,16 @@
         android:layout_centerHorizontal="true"
         android:textColor="#ff0000"
         android:visibility="invisible" />
+
+    <Button
+        android:text="Sign In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/signInBtn"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/InvalidTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
