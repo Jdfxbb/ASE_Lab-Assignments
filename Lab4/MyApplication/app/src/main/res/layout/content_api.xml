@@ -21,8 +21,8 @@
         android:textAlignment="center"
         android:textColor="@android:color/holo_purple"
         android:layout_above="@+id/textView8"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="82dp" />
+        android:layout_marginBottom="82dp"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="Powered by Yandex.Translate"
@@ -51,14 +51,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Enter a Word"
         android:ems="10"
-        android:layout_marginTop="70dp"
-        android:id="@+id/results"
+        android:layout_marginTop="72dp"
+        android:id="@+id/toTranslate"
         android:textSize="36sp"
         android:textColor="@android:color/holo_purple"
         android:textAlignment="center"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:hint="Enter a Word" />
+
+    <TextView
+        android:text="Translation will appear here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toTranslate"
+        android:layout_marginTop="36dp"
+        android:id="@+id/results"
+        android:layout_alignEnd="@+id/textView8"
+        android:layout_alignStart="@+id/textView8"
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
 </RelativeLayout>

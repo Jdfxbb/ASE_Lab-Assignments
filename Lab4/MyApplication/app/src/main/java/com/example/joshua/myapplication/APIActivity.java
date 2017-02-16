@@ -47,7 +47,7 @@ public class APIActivity extends AppCompatActivity {
         translateBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                toTranslateView = (EditText) findViewById(R.id.results);
+                toTranslateView = (EditText) findViewById(R.id.toTranslate);
                 String toTranslate = toTranslateView.getText().toString();
 
                 String getURL = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
