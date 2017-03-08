@@ -1,0 +1,28 @@
+<title>Home</title>
+<ion-modal-view ng-controller="AppCtrl">
+  <ion-header-bar>
+    <h1 class="title">Search</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="search(searchTerm)">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Enter something</span>
+          <input type="text" ng-model="searchTerm">
+            <button class="button button-positive" type="submit">Search</button>
+        </label>
+      </div>
+        <div>
+        <ul >
+            <li ng-repeat"item in results">
+                <p>{{item.name}}</p>
+                <p>{{item.description}}</p>
+            </li>
+        </ul>
+        </div>
+    </form>
+  </ion-content>
+</ion-modal-view>
