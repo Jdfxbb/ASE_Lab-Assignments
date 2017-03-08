@@ -19,7 +19,8 @@ module.exports = function(config) {
       '*.js',
       'js/*.js',
         'node_modules/angular-mocks/angular-mocks.js',
-        'node_modules/angular/angular.js'
+        'node_modules/angular/angular.js',
+        'www/lib/ionic/js/ionic-angular.min.js'
 
 
     ],
